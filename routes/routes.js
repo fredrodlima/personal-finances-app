@@ -1,5 +1,6 @@
-const express = require('express');
-const transactionService = require('../services/transactionService.js');
+import express from 'express';
+import transactionService from '../services/transactionService.js';
+
 const transactionRouter = express.Router();
 
 transactionRouter.get('/', async (req, res, next) => {
@@ -115,4 +116,4 @@ transactionRouter.delete('/:id', async (req, res, next) => {
   }
 });
 
-module.exports = transactionRouter;
+export default transactionRouter;

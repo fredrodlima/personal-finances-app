@@ -1,9 +1,9 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const routes = require('./routes/routes');
-const path = require('path');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import routes from './routes/routes.js';
+import path from 'path';
+import dotenv from 'dotenv';
 
 /**
  * Read ".env" config variables
@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+const __dirname = path.resolve(path.dirname(''));
 /**
  * Link to React App
  */
@@ -49,7 +49,7 @@ mongoose.connect(
   },
   (err) => {
     if (err) {
-      connectedToMongoDB = false;
+      //connectedToMongoDB = false;
       console.error(`Error trying to connect to MongoDB - ${err}`);
     }
   }
@@ -58,7 +58,7 @@ mongoose.connect(
 const { connection } = mongoose;
 
 connection.once('open', () => {
-  connectedToMongoDB = true;
+  //connectedToMongoDB = true;
   console.log('Conected to MongoDB');
 
   /**
