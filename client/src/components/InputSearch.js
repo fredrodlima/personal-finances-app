@@ -1,13 +1,10 @@
 import React from 'react';
 
-export default function InputSearch({ text }) {
+export default function InputSearch(props) {
+  const { textSearch, onSearchChange } = props;
   const handleSearchChange = (event) => {
     const newText = event.target.value;
-    return;
-    //   if (newText != '') return;
-    //   else {
-    //     this.props.onSearchChange(newText);
-    //   }
+    onSearchChange(newText);
   };
 
   return (
@@ -16,7 +13,7 @@ export default function InputSearch({ text }) {
         id="filter"
         placeholder="Filter"
         type="text"
-        value={text}
+        value={textSearch}
         onChange={handleSearchChange}
       />
     </div>

@@ -116,4 +116,19 @@ transactionRouter.delete('/:id', async (req, res, next) => {
   }
 });
 
+transactionRouter.get('/getAllDistinctPeriods', async (_, res, next) => {
+  try {
+    const periods = await transactionService.getAllDistinctPeriods();
+
+    if (!periods.length) {
+      res.status(404).send({ message: 'No periods found.' });
+    }
+    res.status(200).send(periods);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || 'An error occurred when updating transaction',
+    });
+  }
+});
+
 export default transactionRouter;

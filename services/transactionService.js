@@ -60,10 +60,16 @@ const deleteTransaction = async (id) => {
   return deletedTransaction;
 };
 
+const getAllDistinctPeriods = async () => {
+  const allDistinctPeriods = await TransactionModel.distinct('yearMonth');
+  return allDistinctPeriods;
+};
+
 export default {
   getTransactionByPeriod,
   getTransactionById,
   addTransaction,
   updateTransaction,
   deleteTransaction,
+  getAllDistinctPeriods,
 };
