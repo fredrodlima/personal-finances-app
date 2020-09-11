@@ -1,0 +1,40 @@
+.transactionContainer {
+  min-width: 250px;
+  min-height: 80px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin: 15px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-items: center;
+}
+.dayOfMonth {
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 10px;
+}
+.transactionInfo {
+  min-width: 50%;
+}
+.category {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 10px;
+}
+.description {
+  font-size: 1.2rem;
+  padding: 10px;
+}
+.currency {
+  font-size: 1.2rem;
+  padding: 10px;
+  text-align: right;
+}
+.positiveNumber {
+  background-color: rgb(161, 240, 220);
+  padding: 5px;
+}
+.negativeNumber {
+  background-color: rgb(240, 161, 168);
+}
