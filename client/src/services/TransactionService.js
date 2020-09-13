@@ -12,8 +12,12 @@ const createTransaction = (transaction) => {
   return http.post(`/api/transaction`, transaction);
 };
 
-const updateTransaction = (transaction) => {
-  return http.update(`/api/transaction/${transaction.id}`, transaction);
+const updateTransaction = (id, transaction) => {
+  return http.put(`/api/transaction/${id}`, transaction);
+};
+
+const deleteTransaction = (id) => {
+  return http.delete(`/api/transaction/${id}`);
 };
 
 export default {
@@ -21,4 +25,5 @@ export default {
   getTransactionsByPeriod,
   createTransaction,
   updateTransaction,
+  deleteTransaction,
 };

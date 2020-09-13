@@ -30,6 +30,7 @@ export default function App() {
   const [allPeriods, setAllPeriods] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [currentTransaction, setCurrentTransaction] = useState(null);
   const [income, setIncome] = useState(0);
   const [expenses, setExpenses] = useState(0);
   const [balance, setBalance] = useState(0);
@@ -40,6 +41,7 @@ export default function App() {
   const [category, setCategory] = useState('');
   const [value, setValue] = useState(0);
   const [date, setDate] = useState('');
+  const [deleteToogle, setDeleteToogle] = useState(false);
 
   useEffect(() => {
     const getAllPeriods = async () => {
@@ -59,7 +61,15 @@ export default function App() {
           selectedPeriod
         );
         const preparedArray = result.data.transactions.map((transaction) => {
-          const { _id, day, category, description, value, type } = transaction;
+          const {
+            _id,
+            day,
+            category,
+            description,
+            value,
+            type,
+            yearMonthDay,
+          } = transaction;
           return {
             id: _id,
             day,
@@ -67,6 +77,7 @@ export default function App() {
             description,
             value,
             type,
+            yearMonthDay,
             descriptionLowerCase: description.toLowerCase(),
           };
         });
@@ -79,7 +90,7 @@ export default function App() {
       }
     };
     getTransactionByPeriod();
-  }, [selectedPeriod]);
+  }, [selectedPeriod, currentTransaction, deleteToogle]);
 
   const handlePeriodChange = (period) => {
     setSelectedPeriod(period);
@@ -121,9 +132,6 @@ export default function App() {
       }
       case '+ New Transaction': {
         const newDate = new Date();
-        console.log(newDate.getFullYear());
-        console.log(newDate.getMonth());
-        console.log(newDate.getDate());
         setDate(
           `${newDate.getFullYear()}-${formatTwoDigits(
             newDate.getMonth() + 1
@@ -163,27 +171,67 @@ export default function App() {
     setCategory(event.target.value);
   };
 
-  const handleSave = () => {
-    const formattedDate = new Date(date);
-    console.log(formattedDate);
-    console.log(formattedDate.getFullYear());
-    console.log(formattedDate.getMonth());
-    console.log(formattedDate.getDate());
-    const transaction = {
-      description,
-      category,
-      type: isIncome ? '+' : '-',
-      value,
-      year: formattedDate.getFullYear(),
-      month: formattedDate.getMonth() + 1,
-      day: formattedDate.getDate(),
-      yearMonth: `${formattedDate.getFullYear()}-${formatTwoDigits(
-        formattedDate.getMonth() + 1
-      )}`,
-      yearMonthDay: date,
-    };
-    TransactionService.createTransaction(transaction);
-    closeModal();
+  const handleSave = async () => {
+    if (currentTransaction) {
+      const formattedDate = new Date(date);
+      const transaction = {
+        description,
+        category,
+        type: isIncome ? '+' : '-',
+        value,
+        year: formattedDate.getFullYear(),
+        month: formattedDate.getMonth() + 1,
+        day: formattedDate.getDate(),
+        yearMonth: `${formattedDate.getFullYear()}-${formatTwoDigits(
+          formattedDate.getMonth() + 1
+        )}`,
+        yearMonthDay: date,
+      };
+      await TransactionService.updateTransaction(
+        currentTransaction.id,
+        transaction
+      );
+      setCurrentTransaction(null);
+      closeModal();
+    } else {
+      const formattedDate = new Date(date);
+      const transaction = {
+        description,
+        category,
+        type: isIncome ? '+' : '-',
+        value,
+        year: formattedDate.getFullYear(),
+        month: formattedDate.getMonth() + 1,
+        day: formattedDate.getDate(),
+        yearMonth: `${formattedDate.getFullYear()}-${formatTwoDigits(
+          formattedDate.getMonth() + 1
+        )}`,
+        yearMonthDay: date,
+      };
+      await TransactionService.createTransaction(transaction);
+      closeModal();
+    }
+  };
+
+  const handleEdit = (id) => {
+    const transaction = filteredTransactions.filter(
+      (transaction) => transaction.id === id
+    )[0];
+    if (transaction) {
+      setDate(transaction.yearMonthDay);
+      setDescription(transaction.description);
+      setCategory(transaction.category);
+      setValue(transaction.value);
+      setIsIncome(transaction.type === '+' ? true : false);
+      setCurrentTransaction(transaction);
+      setModalTitle('Update Transaction');
+      openModal();
+    }
+  };
+
+  const handleDelete = async (id) => {
+    await TransactionService.deleteTransaction(id);
+    setDeleteToogle(!deleteToogle);
   };
 
   return (
@@ -290,7 +338,11 @@ export default function App() {
       <div>
         <Button value="+ New Transaction" onButtonClick={handleButtonClick} />
         <InputSearch text={textSearch} onSearchChange={handleSearch} />
-        <Transactions transactions={filteredTransactions} />
+        <Transactions
+          transactions={filteredTransactions}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </div>
     </div>
   );
