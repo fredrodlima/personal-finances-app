@@ -1,0 +1,32 @@
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+}
+.transaction {
+  min-width: 25%;
+}
+.income {
+  min-width: 25%;
+  text-align: right;
+}
+.expenses {
+  min-width: 25%;
+  text-align: right;
+}
+.balance {
+  min-width: 25%;
+  text-align: right;
+}
+.positiveNumber {
+  color: green;
+  padding: 5px;
+}
+.negativeNumber {
+  color: red;
+  padding: 5px;
+}
