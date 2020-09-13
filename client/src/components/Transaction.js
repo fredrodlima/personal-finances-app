@@ -19,17 +19,17 @@ export default function Transaction({
   return (
     <li key={transaction.id} className={containerClass}>
       <span className={css.dayOfMonth}>{formatTwoDigits(transaction.day)}</span>
-      <div className={css.transactionInfo}>
-        <span className={css.category}>{transaction.category}</span>
-        <br />
-        <span className={css.description}>{transaction.description}</span>
-      </div>
-      <div>
+      <div className={css.transactionInfoContainer}>
+        <div className={css.transactionInfo}>
+          <span className={css.category}>{transaction.category}</span>
+          <br />
+          <span className={css.description}>{transaction.description}</span>
+        </div>
         <span className={css.currency}>
           {formatCurrency(transaction.value)}
         </span>
       </div>
-      <div>
+      <div className={css.buttonsContainer}>
         <button
           value="edit"
           className="waves-effect waves-teal btn-flat"
